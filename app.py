@@ -969,58 +969,6 @@ with col_btn:
 
 
 # =========================
-# DASHBOARD NAVIGATION
-# =========================
-
-
-st.markdown("""
-<div class="nav-grid">
-<a href="#recurring-payments" class="nav-card nav-blue">
-<div class="nav-icon">🔁</div>
-<div class="nav-title">Recurring Payments</div>
-<div class="nav-description">Track your subscriptions →</div>
-</a>
-<a href="#price-increases" class="nav-card nav-purple">
-<div class="nav-icon">📈</div>
-<div class="nav-title">Price Increases</div>
-<div class="nav-description">Spot rising costs →</div>
-</a>
-<a href="#hidden-fees" class="nav-card nav-green">
-<div class="nav-icon">🔍</div>
-<div class="nav-title">Hidden Fees</div>
-<div class="nav-description">Find unexpected charges →</div>
-</a>
-<a href="#ai-advisor" class="nav-card nav-ai">
-<div class="nav-icon">✨</div>
-<div class="nav-title">AI Advisor</div>
-<div class="nav-description">Smart stack optimization →</div>
-</a>
-<a href="#what-if-simulator" class="nav-card nav-sage">
-<div class="nav-icon">🎛️</div>
-<div class="nav-title">What-If Simulator</div>
-<div class="nav-description">Test cancellation savings →</div>
-</a>
-<a href="#savings-snapshot" class="nav-card nav-yellow">
-<div class="nav-icon">💰</div>
-<div class="nav-title">Savings Snapshot</div>
-<div class="nav-description">See your yearly costs →</div>
-</a>
-<a href="#trial-radar" class="nav-card nav-teal">
-<div class="nav-icon">⏳</div>
-<div class="nav-title">Trial Radar</div>
-<div class="nav-description">Catch free trials early →</div>
-</a>
-<a href="#take-action" class="nav-card nav-pink">
-<div class="nav-icon">✉️</div>
-<div class="nav-title">Take Action</div>
-<div class="nav-description">Create a cancellation draft →</div>
-</a>
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown("---")
-
-# =========================
 # HELPER FUNCTIONS
 # =========================
 import time
@@ -1362,68 +1310,121 @@ try:
 
     fees = detect_possible_fees(df)
 
-
-    # =========================
-    # FINANCIAL OVERVIEW
-    # =========================
-
-    recurring_total = 0.0
-
-    if not recurring.empty:
-
-        monthly = recurring[
-            recurring["Frequency"] == "Monthly"
-        ]
-
-        weekly = recurring[
-            recurring["Frequency"] == "Weekly"
-        ]
-
-        recurring_total = (
-            monthly["Average payment (₹)"].sum()
-            + weekly["Average payment (₹)"].sum() * 4.33
-        )
-
-
-    annualised = recurring_total * 12
-
-    potential_savings = 0.0
-
-    if not hikes.empty:
-
-        potential_savings += hikes["Increase (₹)"].sum() * 12
-
-
-    st.subheader("Your financial overview")
-
-    c1, c2, c3, c4 = st.columns(4)
-
-    c1.metric(
-        "Recurring payments found",
-        len(recurring)
-    )
-
-    c2.metric(
-        "Estimated monthly recurring",
-        f"₹{recurring_total:,.2f}"
-    )
-
-    c3.metric(
-        "Price increases flagged",
-        len(hikes)
-    )
-
-    c4.metric(
-        "Possible fees to review",
-        len(fees)
-    )
-
 except Exception as e:
     st.error(f"Couldn't read this file: {e}")
     st.write(
         "Check that your CSV has the columns: date, description, amount."
     )
     st.stop()
+
+
+# =========================
+# DASHBOARD NAVIGATION
+# =========================
+
+
+st.markdown("""
+<div class="nav-grid">
+<a href="#recurring-payments" class="nav-card nav-blue">
+<div class="nav-icon">🔁</div>
+<div class="nav-title">Recurring Payments</div>
+<div class="nav-description">Track your subscriptions →</div>
+</a>
+<a href="#price-increases" class="nav-card nav-purple">
+<div class="nav-icon">📈</div>
+<div class="nav-title">Price Increases</div>
+<div class="nav-description">Spot rising costs →</div>
+</a>
+<a href="#hidden-fees" class="nav-card nav-green">
+<div class="nav-icon">🔍</div>
+<div class="nav-title">Hidden Fees</div>
+<div class="nav-description">Find unexpected charges →</div>
+</a>
+<a href="#ai-advisor" class="nav-card nav-ai">
+<div class="nav-icon">✨</div>
+<div class="nav-title">AI Advisor</div>
+<div class="nav-description">Smart stack optimization →</div>
+</a>
+<a href="#what-if-simulator" class="nav-card nav-sage">
+<div class="nav-icon">🎛️</div>
+<div class="nav-title">What-If Simulator</div>
+<div class="nav-description">Test cancellation savings →</div>
+</a>
+<a href="#savings-snapshot" class="nav-card nav-yellow">
+<div class="nav-icon">💰</div>
+<div class="nav-title">Savings Snapshot</div>
+<div class="nav-description">See your yearly costs →</div>
+</a>
+<a href="#trial-radar" class="nav-card nav-teal">
+<div class="nav-icon">⏳</div>
+<div class="nav-title">Trial Radar</div>
+<div class="nav-description">Catch free trials early →</div>
+</a>
+<a href="#take-action" class="nav-card nav-pink">
+<div class="nav-icon">✉️</div>
+<div class="nav-title">Take Action</div>
+<div class="nav-description">Create a cancellation draft →</div>
+</a>
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown("---")
+
+# =========================
+# FINANCIAL OVERVIEW
+# =========================
+
+recurring_total = 0.0
+
+if not recurring.empty:
+
+    monthly = recurring[
+        recurring["Frequency"] == "Monthly"
+    ]
+
+    weekly = recurring[
+        recurring["Frequency"] == "Weekly"
+    ]
+
+    recurring_total = (
+        monthly["Average payment (₹)"].sum()
+        + weekly["Average payment (₹)"].sum() * 4.33
+    )
+
+
+annualised = recurring_total * 12
+
+potential_savings = 0.0
+
+if not hikes.empty:
+
+    potential_savings += hikes["Increase (₹)"].sum() * 12
+
+
+st.subheader("Your financial overview")
+
+c1, c2, c3, c4 = st.columns(4)
+
+c1.metric(
+    "Recurring payments found",
+    len(recurring)
+)
+
+c2.metric(
+    "Estimated monthly recurring",
+    f"₹{recurring_total:,.2f}"
+)
+
+c3.metric(
+    "Price increases flagged",
+    len(hikes)
+)
+
+c4.metric(
+    "Possible fees to review",
+    len(fees)
+)
+
 
 
 # =========================
