@@ -60,7 +60,7 @@ def send_gmail_otp(recipient_email: str, otp_code: str) -> tuple[bool, str]:
     
     def send_gmail_otp(recipient_email: str, otp_code: str) -> tuple[bool, str]:
      SENDER_EMAIL = "yashmitabhaskar@gmail.com"
-     APP_PASSWORD = "nytijrwzbevgoeyd"
+     APP_PASSWORD = ""
 
     try:
         msg = EmailMessage()
@@ -870,7 +870,7 @@ p, label, span, li {
     background-color: #F5F3FA !important;
     border: 1.5px solid #DDD6FE !important;
 }
-
+html { scroll-behavior: smooth; } inside your <style>
 </style>
 """, unsafe_allow_html=True)
 
@@ -1430,9 +1430,12 @@ except Exception as e:
     # RECURRING PAYMENTS (MATCHING PASTEL CARDS)
     # =========================
 
-st.markdown('<div id="recurring-section"></div>', unsafe_allow_html=True)
-st.markdown("### 🔄 Recurring Payments Detected")
+st.markdown(
+    '<div id="recurring-payments" class="section-anchor"></div>',
+    unsafe_allow_html=True
+)
 
+st.subheader("🔄 Recurring Payments Detected")
 if recurring_df.empty:
     st.info("No recurring payments detected in this statement.")
 else:
